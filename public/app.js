@@ -440,6 +440,35 @@ function applyMobileView(view, options = {}) {
   }
 }
 
+function scrollToMobileSection(view) {
+  if (window.innerWidth > 1080) {
+    return;
+  }
+
+  const targetSelectorMap = {
+    dashboard: ".panel-dashboard",
+    meals: ".panel-meals",
+    engage: ".panel-engage",
+    settings: ".panel-settings",
+  };
+
+  const selector = targetSelectorMap[view];
+  const target = selector ? document.querySelector(selector) : null;
+  if (!target) {
+    return;
+  }
+
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const topbar = document.querySelector(".topbar");
+  const topbarHeight = topbar?.getBoundingClientRect().height || 0;
+  const targetTop = target.getBoundingClientRect().top + window.scrollY - (topbarHeight + 18);
+
+  window.scrollTo({
+    top: Math.max(0, targetTop),
+    behavior: prefersReducedMotion ? "auto" : "smooth",
+  });
+}
+
 function initMobileTabs() {
   const tabs = document.querySelectorAll(".app-bottom-tab");
   if (tabs.length === 0) {
@@ -452,11 +481,7 @@ function initMobileTabs() {
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       applyMobileView(tab.dataset.view);
-      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      window.scrollTo({
-        top: 0,
-        behavior: prefersReducedMotion ? "auto" : "smooth",
-      });
+      scrollToMobileSection(tab.dataset.view);
     });
   });
 }

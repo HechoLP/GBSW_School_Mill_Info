@@ -1251,45 +1251,28 @@ body.dark .login-required-banner {
 
   .congestion-card,
   .meals-card {
-    display: none;
+    display: block;
   }
 
   .right-col {
-    display: none;
+    display: grid;
     grid-template-columns: 1fr;
   }
 
   .right-col .app-panel {
-    display: none;
+    display: block;
   }
 
-  body.mobile-view-dashboard .congestion-card {
-    display: block;
+  .congestion-card {
     padding: 22px;
   }
 
-  body.mobile-view-dashboard .congestion-card h2 {
+  .congestion-card h2 {
     font-size: 28px;
   }
 
-  body.mobile-view-meals .meals-card {
-    display: block;
-  }
-
-  body.mobile-view-engage .right-col {
-    display: grid;
-  }
-
-  body.mobile-view-engage .right-col .panel-engage {
-    display: block;
-  }
-
-  body.mobile-view-settings .right-col {
-    display: grid;
-  }
-
-  body.mobile-view-settings .right-col .panel-settings {
-    display: block;
+  .app-panel {
+    scroll-margin-top: 110px;
   }
 
   .app-bottom-nav {
@@ -1313,6 +1296,11 @@ body.dark .login-required-banner {
   .top-scroll-button {
     bottom: 92px;
     right: 16px;
+  }
+
+  .meal-list {
+    max-height: none;
+    overflow: visible;
   }
 }
 
