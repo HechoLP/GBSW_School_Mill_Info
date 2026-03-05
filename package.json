@@ -1,5 +1,5 @@
 {
-  "name": "gbsw_school_mill_info-main",
+  "name": "gbsw_school_meal_info",
   "version": "1.0.0",
   "description": "GBSW 스마트 급식 대시보드 (실시간 혼잡도 + 급식/알레르기 + 특식 투표)",
   "main": "server.js",
