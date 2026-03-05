@@ -64,10 +64,29 @@ const state = {
   socketConnected: false,
   realtimeCongestionAvailable: false,
   lastCongestionUpdatedAtMs: null,
+  lastSensorEventAtMs: null,
+  hasRealtimeSensorSource: false,
   dateSyncInProgress: false,
   pendingDateResync: false,
   mobileView: "dashboard",
 };
+
+function isRealtimeSensorSource(sensorId) {
+  const normalized = String(sensorId || "").trim().toLowerCase();
+  if (!normalized) {
+    return false;
+  }
+
+  if (normalized === "simulator" || normalized === "unknown") {
+    return false;
+  }
+
+  if (normalized.startsWith("manual")) {
+    return false;
+  }
+
+  return true;
+}
 
 function getOrCreateUserId() {
   let userId = localStorage.getItem(STORAGE_KEYS.userId);
@@ -587,6 +606,10 @@ function updateCongestionUI(payload) {
     state.lastCongestionUpdatedAtMs = updatedAtMs;
   }
 
+  const sensorEventAtMs = data.lastSensorEvent?.eventAt ? new Date(data.lastSensorEvent.eventAt).getTime() : null;
+  state.lastSensorEventAtMs = Number.isFinite(sensorEventAtMs) ? sensorEventAtMs : null;
+  state.hasRealtimeSensorSource = isRealtimeSensorSource(data.lastSensorEvent?.sensorId);
+
   const badge = document.getElementById("congestion-badge");
   const progress = document.getElementById("progress-bar");
 
@@ -624,10 +647,12 @@ function updateCongestionUI(payload) {
 
 function refreshRealtimeState() {
   const now = Date.now();
-  const hasFreshCongestion = Number.isFinite(state.lastCongestionUpdatedAtMs)
+  const hasFreshSensorEvent = Number.isFinite(state.lastSensorEventAtMs)
+    && (now - state.lastSensorEventAtMs) <= CONGESTION_STALE_MS;
+  const hasRecentServerUpdate = Number.isFinite(state.lastCongestionUpdatedAtMs)
     && (now - state.lastCongestionUpdatedAtMs) <= CONGESTION_STALE_MS;
 
-  state.realtimeCongestionAvailable = Boolean(hasFreshCongestion);
+  state.realtimeCongestionAvailable = Boolean(hasRecentServerUpdate && hasFreshSensorEvent && state.hasRealtimeSensorSource);
 
   const chip = document.getElementById("socket-status");
   const connected = state.realtimeCongestionAvailable;
