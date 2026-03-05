@@ -1,4 +1,4 @@
-const STATIC_CACHE = "gbsw-static-v2";
+const STATIC_CACHE = "gbsw-static-v3";
 
 const STATIC_ASSETS = [
   "/",

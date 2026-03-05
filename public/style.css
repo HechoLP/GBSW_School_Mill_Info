@@ -1211,7 +1211,13 @@ body.dark .login-required-banner {
 }
 
 @media (max-width: 1080px) {
+  html,
+  body {
+    min-height: 100dvh;
+  }
+
   .page {
+    min-height: 100dvh;
     padding-bottom: 112px;
   }
 
@@ -1220,6 +1226,8 @@ body.dark .login-required-banner {
     top: 8px;
     z-index: 40;
     padding: 16px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .top-actions {
@@ -1241,6 +1249,7 @@ body.dark .login-required-banner {
 
   .grid {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .congestion-card,
@@ -1249,17 +1258,33 @@ body.dark .login-required-banner {
     grid-column: auto;
   }
 
-  .congestion-card,
-  .meals-card {
-    display: block;
-  }
-
   .right-col {
     display: grid;
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
-  .right-col .app-panel {
+  .panel-dashboard,
+  .panel-meals,
+  .panel-engage,
+  .panel-settings {
+    display: none;
+  }
+
+  body.mobile-view-dashboard .panel-dashboard,
+  body.mobile-view-dashboard .panel-settings {
+    display: block;
+  }
+
+  body.mobile-view-meals .panel-meals {
+    display: block;
+  }
+
+  body.mobile-view-engage .panel-engage {
+    display: block;
+  }
+
+  body.mobile-view-settings .panel-settings {
     display: block;
   }
 
@@ -1271,8 +1296,9 @@ body.dark .login-required-banner {
     font-size: 28px;
   }
 
-  .app-panel {
-    scroll-margin-top: 110px;
+  .meal-list {
+    max-height: none;
+    overflow: visible;
   }
 
   .app-bottom-nav {
@@ -1296,11 +1322,6 @@ body.dark .login-required-banner {
   .top-scroll-button {
     bottom: 92px;
     right: 16px;
-  }
-
-  .meal-list {
-    max-height: none;
-    overflow: visible;
   }
 }
 

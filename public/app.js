@@ -459,31 +459,14 @@ function applyMobileView(view, options = {}) {
   }
 }
 
-function scrollToMobileSection(view) {
+function scrollToMobileViewTop() {
   if (window.innerWidth > 1080) {
     return;
   }
 
-  const targetSelectorMap = {
-    dashboard: ".panel-dashboard",
-    meals: ".panel-meals",
-    engage: ".panel-engage",
-    settings: ".panel-settings",
-  };
-
-  const selector = targetSelectorMap[view];
-  const target = selector ? document.querySelector(selector) : null;
-  if (!target) {
-    return;
-  }
-
   const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const topbar = document.querySelector(".topbar");
-  const topbarHeight = topbar?.getBoundingClientRect().height || 0;
-  const targetTop = target.getBoundingClientRect().top + window.scrollY - (topbarHeight + 18);
-
   window.scrollTo({
-    top: Math.max(0, targetTop),
+    top: 0,
     behavior: prefersReducedMotion ? "auto" : "smooth",
   });
 }
@@ -495,12 +478,13 @@ function initMobileTabs() {
   }
 
   const savedView = localStorage.getItem(STORAGE_KEYS.mobileView);
-  applyMobileView(savedView || "dashboard", { save: false });
+  const initialView = window.innerWidth <= 1080 ? "dashboard" : (savedView || "dashboard");
+  applyMobileView(initialView, { save: false });
 
   tabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       applyMobileView(tab.dataset.view);
-      scrollToMobileSection(tab.dataset.view);
+      scrollToMobileViewTop();
     });
   });
 }
